@@ -1,0 +1,5 @@
+requirements.txt
+*.pyc
+config.py
+__pycache__
+migrations
