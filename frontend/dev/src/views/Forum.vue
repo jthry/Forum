@@ -46,17 +46,6 @@ export default {
             forum.push(data);
           } else {
             let index = (data['board_num'] - (data['board_num'] % 100)) / 100 - 1;
-            let date = new Date(data['last_date']);
-            data['last_date'] =
-              date.getFullYear() +
-              '-' +
-              (date.getMonth() + 1) +
-              '-' +
-              date.getDate() +
-              ' ' +
-              date.getHours() +
-              ':' +
-              date.getMinutes();
             data['board_url'] = '/forum/' + data['board_num'];
             data['post_url'] = data['board_url'] + '/' + data['last_topic_num'];
             forum[index]['boards'].push(data);

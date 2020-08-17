@@ -1,6 +1,6 @@
 <template>
   <div id="page">
-    <div class="page" :class="current(page)" @click="page_turn(page)" v-for="page in page_arr" :key="page">
+    <div class="page" :class="current(page)" @click="page_turn(page)" v-for="(page, index) in page_arr" :key="index">
       {{ page }}
     </div>
   </div>
@@ -30,8 +30,9 @@ export default {
         arr.push('...');
       }
 
-      let page = this.current_page > 6 ? this.current_page - 4 : 2;
+      let page = this.current_page - 4;
       page = page > this.max_page - 9 ? this.max_page - 9 : page;
+      page = page > 2 ? page : 2;
       let len = this.max_page > 10 ? 8 : this.max_page - 3;
       for (let i = 0; i <= len; i++) {
         arr.push(page + i);

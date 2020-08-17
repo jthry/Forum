@@ -122,29 +122,25 @@ def add_topic(request):
     topic = data.get('topic')
     post = data.get('post')
 
-    board = models.Boards.objects.filter(board_num = board_num)[0]
-    board.topic_sum = board.topic_sum + 1
-    board.post_sum = board.post_sum + 1
-
     topic_id = uuid.uuid4()
     post_id = uuid.uuid4()
-    if models.Topics.objects.filter(id = topic_id).exists() or \
-        models.Posts.objects.filter(id = post_id).exists():
-      return
+    if models.Topics.objects.filter(id = topic_id).exists():
+      topic_id = uuid.uuid4()
+    if models.Posts.objects.filter(id = post_id).exists():
+      post_id = uuid.uuid4()
     
+    board = models.Boards.objects.filter(board_num = board_num)[0]
+    topic_model = models.Topics.objects.filter(board = board.id)
+
     creator = request.user
     date = timezone.now()
-    topic_max = models.Topics.objects.filter(board = board.id).aggregate(Max('topic_num'))['topic_num__max']
-    if topic_max:
-      topic_num = topic_max + 1
-    else:
-      topic_num = 1
+
     add_topic = models.Topics(
       id = topic_id,
       topic = topic,
       creator = creator,
       date = date,
-      topic_num = topic_num,
+      topic_num = None,
       post_sum = 1,
       last_post = None,
       last_date = date,
@@ -166,6 +162,12 @@ def add_topic(request):
 
     try:
       with transaction.atomic():
+        board.topic_sum = board.topic_sum + 1
+        board.post_sum = board.post_sum + 1
+        topic_max = topic_model.aggregate(Max('topic_num'))['topic_num__max']
+        topic_num = topic_max + 1 if topic_max else 1
+        add_topic.topic_num = topic_num
+
         board.save()
         add_topic.save()
         add_post.save()
@@ -187,19 +189,17 @@ def add_post(request):
     post = data.get('post')
 
     board = models.Boards.objects.filter(board_num = board_num)[0]
-    board.post_sum = board.post_sum + 1
     topic = models.Topics.objects.filter(topic_num = topic_num)[0]
-    topic.post_sum = topic.post_sum + 1
-    
+
     poster = request.user
     date = timezone.now()
-    post_max = models.Posts.objects.filter(topic = topic.id).aggregate(Max('post_num'))
-    post_num = post_max['post_num__max'] + 1
+    post_model = models.Posts.objects.filter(topic = topic.id)
+    
     add_post = models.Posts(
       post = post,
       poster = poster,
       date = date,
-      post_num = post_num,
+      post_num = None,
       topic = topic,
       last_date = None
     )
@@ -210,6 +210,11 @@ def add_post(request):
 
     try:
       with transaction.atomic():
+        board.post_sum = board.post_sum + 1
+        topic.post_sum = topic.post_sum + 1
+        post_max = post_model.aggregate(Max('post_num'))['post_num__max']
+        add_post.post_num = post_max + 1
+
         board.save()
         topic.save()
         add_post.save()
@@ -219,7 +224,8 @@ def add_post(request):
     transaction.commit()
 
     return JsonResponse({
-      'code': 1
+      'code': 1,
+      'post_sum': topic.post_sum
     })
 
 def delete_topic(request):
@@ -233,10 +239,10 @@ def delete_topic(request):
     topic = models.Topics.objects.filter(board = board.id, topic_num = topic_num)[0]
 
     if topic.creator == request.user:
-      board.topic_sum -= 1
-      board.post_sum -= topic.post_sum
       try:
         with transaction.atomic():
+          board.topic_sum -= 1
+          board.post_sum -= topic.post_sum
           board.save()
           topic.delete()
       except:
@@ -265,10 +271,10 @@ def delete_post(request):
     post = models.Posts.objects.filter(topic = topic.id, post_num = post_num)[0]
 
     if post.poster == request.user:
-      board.post_sum -= 1
-      topic.post_sum -= 1
       try:
         with transaction.atomic():
+          board.post_sum -= 1
+          topic.post_sum -= 1
           board.save()
           topic.save()
           post.delete()

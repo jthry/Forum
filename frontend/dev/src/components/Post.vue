@@ -28,7 +28,6 @@ export default {
         if (this.topic) {
           let len = this.topic.length;
           if (len > 30) this.topic = this.topic.substring(0, 30);
-
           if (len > 20) this.topic_tip = 'Can also input ' + (30 - len) + ' words';
           else this.topic_tip = '';
         } else {
@@ -40,7 +39,6 @@ export default {
       if (this.post) {
         let len = this.post.length;
         if (len > 250) this.post = this.post.substring(0, 250);
-
         if (len > 230) this.post_tip = 'Can also input ' + (250 - len) + ' words';
         else this.post_tip = '';
       } else {
@@ -81,7 +79,15 @@ export default {
               })
               .then(response => {
                 if (response.data.code == 1) {
-                  this.$router.go(0);
+                  let page = response.data.post_sum;
+                  page = Math.ceil(page / 20);
+                  let current_page = this.$route.params.topic_num.split('-')[1];
+                  if (current_page == page) {
+                    this.$router.push({ path: '/refresh', query: { path: this.$route.fullPath } });
+                  } else {
+                    let path = '/forum/' + this.board_num + '/' + this.topic_num + '-' + page;
+                    this.$router.push({ path: path });
+                  }
                 }
               })
               .catch(() => {

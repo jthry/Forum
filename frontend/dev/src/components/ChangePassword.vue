@@ -55,8 +55,8 @@ export default {
           })
           .then(response => {
             if (response.data.code == 1) {
-              this.$store.commit('changeLoginState', false);
-              this.$store.commit('setUsername', '');
+              this.$store.commit('change_login_state', false);
+              this.$store.commit('set_username', '');
               this.$router.push({ path: '/login' });
             }
             this.cancel_change();

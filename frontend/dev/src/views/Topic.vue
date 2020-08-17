@@ -3,7 +3,7 @@
   <div id="topic">
     <div class="topic_container">
       <div class="topic">{{ topic.topic }}</div>
-      <div class="container" v-for="(item, index) in post" :key="item.post_num">
+      <div class="container" v-for="(item, index) in posts" :key="item.post_num">
         <div class="poster_container">
           <div class="poster" :class="creator(item.is_creator)">{{ item.poster }}</div>
           <div class="profile">
@@ -44,12 +44,61 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 axios.defaults.withCredentials = true;
 
+function get_data(to, from, next, vm_exist) {
+  let path = to.path.split('/');
+  let board_num = path[path.length - 2];
+  let [topic_num, page] = path[path.length - 1].split('-');
+
+  // eslint-disable-next-line prettier/prettier
+  if (
+    /^[1-9][0-9]*$/.test(board_num) &&
+    /^[1-9][0-9]*$/.test(topic_num) &&
+    (page == undefined || /^[1-9][0-9]*$/.test(page))
+  ) {
+    page = page || 1;
+    let vm;
+    let get_vm = v => (vm = v);
+
+    axios
+      .get('/forum/' + board_num + '/' + topic_num, {
+        params: {
+          page: page
+        }
+      })
+      .then(response => {
+        vm = vm || vm_exist;
+        set_data(response, vm, page, topic_num, board_num);
+      });
+
+    next(vm => {
+      get_vm(vm);
+    });
+  } else {
+    next('/404');
+  }
+}
+
+function set_data(response, vm, page, topic_num, board_num) {
+  let topic = response.data.topic_information;
+  let posts = response.data.post_data;
+
+  vm.board_num = board_num || vm.board_num;
+  vm.topic_num = topic_num || vm.topic_num;
+  vm.page = Number(page) || vm.page;
+  let max = topic.post_sum;
+  max = Math.ceil(max / 20);
+  max = max ? max : 1;
+  vm.max_page = max;
+  vm.$set(vm, 'topic', topic);
+  vm.$set(vm, 'posts', posts);
+}
+
 export default {
   name: 'Topic',
   data() {
     return {
       topic: '',
-      post: '',
+      posts: '',
       edit_content: '',
       edit_index: '',
       board_num: '',
@@ -94,7 +143,7 @@ export default {
     update(index, post_num) {
       if (this.$store.state.btn_switch) {
         if (this.edit_index !== '') {
-          if (this.edit_content == this.post[0]['post']) {
+          if (this.edit_content == this.posts[0]['post']) {
             this.edit_index = '';
             this.edit_content = '';
           } else {
@@ -110,15 +159,7 @@ export default {
               .then(response => {
                 this.edit_index = '';
                 this.edit_content = '';
-                let topic = response.data.topic_information;
-                let post = response.data.post_data;
-
-                let max = topic.post_sum;
-                max = Math.ceil(max / 20);
-                this.max_page = max;
-
-                this.$set(this, 'topic', topic);
-                this.$set(this, 'post', post);
+                set_data(response, this);
               })
               .catch(() => {
                 this.edit_index = '';
@@ -132,7 +173,7 @@ export default {
       if (this.$store.state.btn_switch) {
         this.$store.dispatch('btn_sleep');
         let page = this.page;
-        if (this.topics == 1 && this.page != 1) {
+        if (this.posts.length == 1 && this.page != 1) {
           page = this.page - 1;
         }
         this.$axios
@@ -144,16 +185,7 @@ export default {
           })
           .then(response => {
             if (response.status == 200) {
-              let topic = response.data.topic_information;
-              let post = response.data.post_data;
-
-              this.page = page;
-              let max = topic.post_sum;
-              max = Math.ceil(max / 20);
-              this.max_page = max;
-
-              this.$set(this, 'topic', topic);
-              this.$set(this, 'post', post);
+              set_data(response, this, page);
             }
           });
       }
@@ -186,85 +218,10 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    let path = to.path.split('/');
-    let board_num = path[path.length - 2];
-    let topic_arr = path[path.length - 1];
-    let [topic_num, page] = topic_arr.split('-');
-
-    if (
-      /^[1-9][0-9]*$/.test(board_num) &&
-      /^[1-9][0-9]*$/.test(topic_num) &&
-      (page == undefined || /^[1-9][0-9]*$/.test(page))
-    ) {
-      page = Number(page) || 1;
-      let vm;
-      let getVm = v => (vm = v);
-
-      axios
-        .get('/forum/' + board_num + '/' + topic_num, {
-          params: {
-            page: page
-          }
-        })
-        .then(response => {
-          let topic = response.data.topic_information;
-          let post = response.data.post_data;
-          vm.board_num = board_num;
-          vm.topic_num = topic_num;
-
-          vm.page = page;
-          let max = topic.post_sum;
-          max = Math.ceil(max / 20);
-          vm.max_page = max;
-
-          vm.$set(vm, 'topic', topic);
-          vm.$set(vm, 'post', post);
-        });
-
-      next(vm => {
-        getVm(vm);
-      });
-    } else {
-      next('/404');
-    }
+    get_data(to, from, next);
   },
   beforeRouteUpdate(to, from, next) {
-    let path = to.path.split('/');
-    let board_num = path[path.length - 2];
-    let topic_arr = path[path.length - 1];
-    let [topic_num, page] = topic_arr.split('-');
-
-    if (
-      /^[1-9][0-9]*$/.test(board_num) &&
-      /^[1-9][0-9]*$/.test(topic_num) &&
-      (page == undefined || /^[1-9][0-9]*$/.test(page))
-    ) {
-      page = Number(page) || 1;
-      axios
-        .get('/forum/' + board_num + '/' + topic_num, {
-          params: {
-            page: page
-          }
-        })
-        .then(response => {
-          let topic = response.data.topic_information;
-          let post = response.data.post_data;
-          this.board_num = board_num;
-          this.topic_num = topic_num;
-
-          this.page = page;
-          let max = topic.post_sum;
-          max = Math.ceil(max / 20);
-          this.max_page = max;
-
-          this.$set(this, 'topic', topic);
-          this.$set(this, 'post', post);
-        });
-
-      next();
-    } else {
-      next('/404');
-    }
+    get_data(to, from, next, this);
   }
 };
 </script>

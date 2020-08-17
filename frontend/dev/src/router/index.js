@@ -44,9 +44,14 @@ const routes = [
     component: () => import('@/views/Topic')
   },
   {
+    path: '/refresh',
+    name: 'Refresh',
+    component: () => import('@/components/Refresh.vue')
+  },
+  {
     path: '/404',
     name: 'NotFound',
-    component: () => import('../components/NotFound.vue')
+    component: () => import('@/components/NotFound.vue')
   },
   {
     path: '*',

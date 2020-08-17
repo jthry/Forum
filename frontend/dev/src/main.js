@@ -66,27 +66,31 @@ axios.defaults.withCredentials = true;
     Vue.mixin({
       methods: {
         time_format(date) {
-          date = new Date(date);
-          let now = this.$store.state.now;
-          let time = now - date;
-          let today = now - (now % (24 * 60 * 60 * 1000));
-          let yesterday = today - 24 * 60 * 60 * 1000;
+          if (date) {
+            date = new Date(date);
+            let now = this.$store.state.now;
+            let time = now - date;
+            let today = now - (now % (24 * 60 * 60 * 1000));
+            let yesterday = today - 24 * 60 * 60 * 1000;
 
-          if (time < 60000) {
-            return 'A moment ago';
-          } else if (date >= yesterday && date < today) {
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            return 'Yesterday at ' + hours + ':' + minutes;
-          } else if (time < 60 * 60 * 1000 && time >= 60 * 1000) {
-            return Math.floor(time / 60000) + ' minutes ago';
-          } else if (time < 24 * 60 * 60 * 1000 && time >= 60 * 60 * 1000) {
-            return Math.floor(time / 3600000) + ' hours ago';
-          } else if (date >= today - 7 * 24 * 60 * 60 * 1000 && date < yesterday) {
-            return Math.ceil((today - date) / (24 * 60 * 60 * 1000)) + ' days ago';
+            if (time < 60000) {
+              return 'A moment ago';
+            } else if (date >= yesterday && date < today) {
+              let hours = date.getHours();
+              let minutes = date.getMinutes();
+              minutes = minutes < 10 ? '0' + minutes : minutes;
+              return 'Yesterday at ' + hours + ':' + minutes;
+            } else if (time < 60 * 60 * 1000 && time >= 60 * 1000) {
+              return Math.floor(time / 60000) + ' minutes ago';
+            } else if (time < 24 * 60 * 60 * 1000 && time >= 60 * 60 * 1000) {
+              return Math.floor(time / 3600000) + ' hours ago';
+            } else if (date >= today - 7 * 24 * 60 * 60 * 1000 && date < yesterday) {
+              return Math.ceil((today - date) / (24 * 60 * 60 * 1000)) + ' days ago';
+            } else {
+              return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            }
           } else {
-            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            return '';
           }
         }
       }
