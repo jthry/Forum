@@ -27,9 +27,8 @@ git clone https://github.com/jthry/Forum.git
 Create a new database  
 Then create a new file config.py in backend/backend, add the following content
 
-`SECRET_KEY = 'a secret key'`  
-For example, '000000'  
 ```
+SECRET_KEY = '000000'
 NAME = 'database name'  
 USER = 'database user'  
 PASSWORD = 'database password'  
