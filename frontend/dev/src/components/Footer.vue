@@ -1,7 +1,7 @@
 <template>
   <div id="footer">
     <div class="copy_container">
-      <span class="copyright">©{{ thisYear }} XX. All rights reserved.</span>
+      <span class="copyright">©{{ thisYear }} Forum. All rights reserved.</span>
     </div>
   </div>
 </template>

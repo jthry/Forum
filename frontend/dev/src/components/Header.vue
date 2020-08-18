@@ -2,7 +2,7 @@
   <div id="header">
     <div class="header clearfix" :class="header_scroll">
       <div class="logo_container">
-        <router-link to="/" class="logo" tag="div">XX</router-link>
+        <router-link to="/" class="logo" tag="div">Forum</router-link>
       </div>
       <div class="user_container">
         <span class="user">{{ username }}</span>
