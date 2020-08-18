@@ -56,33 +56,34 @@ def forum_data(request):
 
 def board_data(request, board_num):
   page = int(request.GET.get('page') or 1)
-  board_num = board_num
+  board_num = int(board_num)
 
-  board = models.Boards.objects.filter(board_num = board_num).values('id', 'name', 'topic_sum', 'post_sum')[0]
-  Topics = models.Topics.objects.filter(board = board['id']).order_by('-last_date')[20*(page-1) : 20*page] \
-      .values('topic', 'creator', 'date', 'topic_num', 'post_sum', 'last_post', 'last_date')
-  del board['id']
-  board_data = []
+  if board_num % 100 != 0:
+    board = models.Boards.objects.filter(board_num = board_num).values('id', 'name', 'topic_sum', 'post_sum')[0]
+    Topics = models.Topics.objects.filter(board = board['id']).order_by('-last_date')[20*(page-1) : 20*page] \
+        .values('topic', 'creator', 'date', 'topic_num', 'post_sum', 'last_post', 'last_date')
+    del board['id']
+    board_data = []
 
-  for data in Topics:
-    creator = User.objects.filter(id = data['creator']).values('username')[0]
-    data['creator'] = creator['username']
+    for data in Topics:
+      creator = User.objects.filter(id = data['creator']).values('username')[0]
+      data['creator'] = creator['username']
 
-    post = models.Posts.objects.filter(id = data['last_post']).values('poster', 'post_num')
-    try:
-      data.update(post[0])
-      poster = User.objects.filter(id = data['poster']).values('username')[0]
-      data['poster'] = poster['username']
-    except IndexError:
-      pass
-    del data['last_post']
+      post = models.Posts.objects.filter(id = data['last_post']).values('poster', 'post_num')
+      try:
+        data.update(post[0])
+        poster = User.objects.filter(id = data['poster']).values('username')[0]
+        data['poster'] = poster['username']
+      except IndexError:
+        pass
+      del data['last_post']
 
-    board_data.append(data)
+      board_data.append(data)
 
-  return JsonResponse({
-    'board_information': board,
-    'board_data': board_data
-  })
+    return JsonResponse({
+      'board_information': board,
+      'board_data': board_data
+    })
 
 def topic_data(request, board_num, topic_num):
   page = int(request.GET.get('page') or 1)

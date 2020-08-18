@@ -5,7 +5,7 @@
         <router-link to="/" class="logo" tag="div">Forum</router-link>
       </div>
       <div class="user_container">
-        <span class="user">{{ username }}</span>
+        <div class="user">{{ username }}</div>
         <div class="user_menu">
           <div @click="change_password">Change password</div>
           <div @click="logout">Logout</div>
@@ -67,7 +67,7 @@ export default {
   text-align: center;
   background-image: linear-gradient(rgba(60, 60, 60, 0.9), rgba(30, 30, 30, 0.9));
   box-shadow: 0px 3px 6px rgba(30, 30, 30, 0.9);
-  padding: 3px;
+  padding: 3px 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -84,22 +84,26 @@ export default {
     }
   }
   .user_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     float: right;
     width: 100px;
     height: 100%;
     position: relative;
-    .user::after {
-      content: '';
-      display: inline-block;
-      height: 100%;
-      visibility: hidden;
-      vertical-align: middle;
+    .user {
+      flex: 1;
+      font-size: 18px;
+      line-height: 22px;
+      padding-bottom: 2px;
     }
     .user_menu {
       display: none;
       width: 100%;
       margin: auto;
       box-sizing: border-box;
+      position: absolute;
+      top: 49px;
       > div {
         font-size: 14px;
         border: 1px solid #aaa;
@@ -123,9 +127,6 @@ export default {
   background: rgba(30, 30, 30, 0.7);
   box-shadow: none;
   padding: 0;
-  .to_top {
-    opacity: 1;
-  }
 }
 .fixed {
   height: 55px;
