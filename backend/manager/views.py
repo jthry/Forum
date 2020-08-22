@@ -90,10 +90,10 @@ def add(request):
     if container_name != None and power > 1000:
       try:          
         with transaction.atomic():
-          container = Boards.objects.filter(name = container_name)
+          container = Boards.objects.filter(name = container_name, board_num__endswith = '00')
           if not container:
             board_max = Boards.objects.filter(board_num__endswith = '00').aggregate(Max('board_num'))['board_num__max']
-            new_board_num = board_max + 100
+            new_board_num = board_max + 100 if board_max else 100
             new_container = Boards(
               name = container_name,
               board_num = new_board_num,
@@ -116,7 +116,7 @@ def add(request):
           elif container and board_name != None:
             container = container.get()
             if container.board_num % 100 == 0:
-              boards = [(board.name, board.board_num) for board in Boards.objects.raw('SELECT id, name, board_num FROM forum_boards WHERE board_num LIKE %s AND board_num > %s', [str(container.board_num // 100) + '__', container.board_num])]
+              boards = [(board.name, board.board_num) for board in Boards.objects.raw('SELECT id, name, board_num FROM forum_boards WHERE board_num LIKE %s', [str(container.board_num // 100) + '__'])]
               boards = [[i[0] for i in boards], [i[1] for i in boards]]
               if board_name not in boards[0]:
                 board_max = max(boards[1])
