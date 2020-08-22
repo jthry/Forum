@@ -7,5 +7,5 @@ export default {
   beforeCreate() {
     this.$router.replace(this.$route.query.path);
   }
-}
+};
 </script>

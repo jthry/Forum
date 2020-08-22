@@ -60,6 +60,8 @@ export default {
               })
               .then(response => {
                 if (response.status == 200) {
+                  this.topic = '';
+                  this.post = '';
                   let path = '/forum/' + this.board_num + '/' + response.data.topic_num;
                   this.$router.push({ path });
                 }
@@ -79,6 +81,7 @@ export default {
               })
               .then(response => {
                 if (response.data.code == 1) {
+                  this.post = '';
                   let page = response.data.post_sum;
                   page = Math.ceil(page / 20);
                   let current_page = this.$route.params.topic_num.split('-')[1];

@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from manager.models import Permission, Area
 import json
 
 def csrf(request):
@@ -15,11 +16,22 @@ def userLogin(request):
 
     user = authenticate(request, username=username, password=password)
     if user:
-      login(request, user)
-      return JsonResponse({
+      data = {
         'code': 1,
-        'username': username
-      })
+      }
+      permission = user.permission_set.all()
+      if permission:
+        power = permission.get().power
+        area = user.area_set.all()
+        area_arr = []
+        for a in area:
+          # board_num_id is ForeignKey board_num
+          area_arr.append(a.board_num_id)
+        data['power'] = power
+        data['area'] = area_arr
+
+      login(request, user)
+      return JsonResponse(data)
     else:
       return JsonResponse({
         'status': 0
@@ -47,8 +59,6 @@ def userLogout(request):
     logout(request)
 
     response = JsonResponse({'code': 1})
-    response.delete_cookie('isLogin')
-    response.delete_cookie('username')
     return response
 
 def changePassword(request):

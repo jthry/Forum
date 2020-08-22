@@ -2,8 +2,10 @@
   <div id="forum">
     <div class="forum_container">
       <div class="container" v-for="container in forum" :key="container.board_num">
+        <manage power="1000" :board_num="container.board_num"></manage>
         <div class="container_name">{{ container.name }}</div>
         <div class="board clearfix" v-for="item in container.boards" :key="item.board_num">
+          <manage power="1000" :board_num="item.board_num"></manage>
           <div class="icon">
             <font-awesome-icon :icon="['fas', 'comments']" />
           </div>
@@ -19,6 +21,7 @@
           </div>
         </div>
       </div>
+      <manage power="1000" :add_board="true"></manage>
     </div>
   </div>
 </template>
@@ -31,6 +34,9 @@ export default {
       forum: []
     };
   },
+  components: {
+    manage: () => import('@/components/Manage.vue')
+  },
   created() {
     this.$axios.get('/forum/forumdata').then(response => {
       if (response.status == 200) {
@@ -42,7 +48,6 @@ export default {
         for (let data of forum_data) {
           if (data['board_num'] % 100 == 0) {
             data['boards'] = [];
-            delete data['board_num'];
             forum.push(data);
           } else {
             let index = (data['board_num'] - (data['board_num'] % 100)) / 100 - 1;

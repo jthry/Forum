@@ -39,9 +39,13 @@ export default {
             if (response.data.code == 1) {
               this.$store.commit('change_login_state', true);
               this.$store.commit('set_username', this.username);
+              if (response.data.power) {
+                this.$store.commit('set_power', response.data.power);
+                this.$store.commit('set_area', response.data.area);
+              }
               this.$router.push({ path: '/forum' });
             } else {
-              this.tip = 'The username or password error';
+              this.tip = 'Username or Password error';
             }
           })
           .catch(() => {

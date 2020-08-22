@@ -1,11 +1,11 @@
 <template>
-  <!-- eslint-disable prettier/prettier -->
   <div id="topic">
     <div class="topic_container">
       <div class="topic">{{ topic.topic }}</div>
       <div class="container" v-for="(item, index) in posts" :key="item.post_num">
+        <manage :power="item.power" :board_num="board_num" :topic_num="topic_num" :post_num="item.post_num"></manage>
         <div class="poster_container">
-          <div class="poster" :class="creator(item.is_creator)">{{ item.poster }}</div>
+          <div class="poster" :class="moderator(item.power)">{{ item.poster }}</div>
           <div class="profile">
             <font-awesome-icon :icon="['fas', 'user']" />
           </div>
@@ -14,22 +14,27 @@
           <div class="detail clearfix">
             <div class="date">{{ time_format_post(item.date) }}</div>
             <div class="post_num">#{{ item.post_num }}</div>
-            <div class="finish button" title="finish" @click="update(index, item.post_num)" v-if="is_poster(item.poster)" v-show="is_edit(index)">
-              <font-awesome-icon :icon="['fas', 'check']" />
+            <div class="button_container" v-if="is_poster(item.poster)" v-show="is_edit(index)">
+              <div class="button" title="cancel" @click="cancel">
+                <font-awesome-icon :icon="['fas', 'times']" />
+              </div>
+              <div class="button" title="finish" @click="update(index, item.post_num)">
+                <font-awesome-icon :icon="['fas', 'check']" />
+              </div>
             </div>
-            <div class="delete button" title="delete" @click="del(index,item.post_num)" v-if="is_poster(item.poster)&&not_1(item.post_num)" v-show="!is_edit(index)">
-              <font-awesome-icon :icon="['fas', 'trash-alt']" />
-            </div>
-            <div class="edit button" title="edit" @click="edit(index,item.post)" v-if="is_poster(item.poster)" v-show="!is_edit(index)">
-              <font-awesome-icon :icon="['fas', 'pencil-alt']" />
-            </div>
-            <div class="cancel button" title="cancel" @click="cancel" v-if="is_poster(item.poster)" v-show="is_edit(index)">
-              <font-awesome-icon :icon="['fas', 'times']" />
+            <div class="button_container" v-if="is_poster(item.poster)" v-show="!is_edit(index)">
+              <div class="button" title="edit" @click="edit(index, item.post)">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" />
+              </div>
+              <div class="button" title="delete" @click="del(index, item.post_num)" v-if="not_1(item.post_num)">
+                <font-awesome-icon :icon="['fas', 'trash-alt']" />
+              </div>
             </div>
           </div>
           <div class="post">
             <div v-show="!is_edit(index)">{{ item.post }}</div>
-            <text-edit class="text_edit" :text_first="edit_content" @change_text="change_text" v-if="is_edit(index)"></text-edit>
+            <text-edit class="text_edit" :text_first="edit_content" @change_text="change_text" v-if="is_edit(index)">
+            </text-edit>
           </div>
         </div>
       </div>
@@ -82,6 +87,14 @@ function set_data(response, vm, page, topic_num, board_num) {
   let topic = response.data.topic_information;
   let posts = response.data.post_data;
 
+  for (let i = 0; i < posts.length; i++) {
+    if (!posts[i]['power']) posts[i]['power'] = 0;
+    if (posts[i]['poster'] == topic.creator) posts[i]['power'] += 10;
+  }
+  if (vm.$store.state.username == topic.creator && vm.$store.state.power == 0) {
+    vm.$store.commit('set_power', vm.$store.state.power + 10);
+  }
+
   vm.board_num = board_num || vm.board_num;
   vm.topic_num = topic_num || vm.topic_num;
   vm.page = Number(page) || vm.page;
@@ -108,6 +121,7 @@ export default {
     };
   },
   components: {
+    manage: () => import('@/components/Manage'),
     post: () => import('@/components/Post'),
     page: () => import('@/components/Page'),
     textEdit: () => import('@/components/TextEdit')
@@ -116,8 +130,8 @@ export default {
     change_text(text) {
       this.edit_content = text;
     },
-    creator(is_creator) {
-      if (is_creator) return 'creator';
+    moderator(power) {
+      if (power >= 200) return 'moderator';
     },
     is_poster(poster) {
       return poster == this.$store.state.username;
@@ -217,6 +231,11 @@ export default {
       }
     }
   },
+  destroyed() {
+    if (this.$store.state.power == 10) {
+      this.$store.commit('set_power', 0);
+    }
+  },
   beforeRouteEnter(to, from, next) {
     get_data(to, from, next);
   },
@@ -258,11 +277,11 @@ export default {
         border-right: 1px solid rgb(211, 211, 211);
         background: rgb(248, 248, 248);
         .poster {
-          color: rgb(64, 64, 255);
+          color: rgb(78, 119, 255);
           border-bottom: 1px solid rgb(211, 211, 211);
           padding: 3px;
         }
-        .creator {
+        .moderator {
           color: rgb(255, 64, 64);
         }
         .profile {
@@ -289,13 +308,16 @@ export default {
             float: right;
             margin-right: 10px;
           }
-          .button {
+          .button_container {
             float: right;
-            width: 16px;
-            font-size: 16px;
-            text-align: center;
-            margin-right: 10px;
-            cursor: pointer;
+            .button {
+              display: inline-block;
+              width: 16px;
+              font-size: 16px;
+              text-align: center;
+              margin-right: 10px;
+              cursor: pointer;
+            }
           }
         }
         .post {

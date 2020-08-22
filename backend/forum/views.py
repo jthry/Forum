@@ -66,8 +66,11 @@ def board_data(request, board_num):
     board_data = []
 
     for data in Topics:
-      creator = User.objects.filter(id = data['creator']).values('username')[0]
-      data['creator'] = creator['username']
+      creator = User.objects.filter(id = data['creator']).get()
+      permission = creator.permission_set.all()
+      if permission:
+        data['power'] = permission.get().power
+      data['creator'] = creator.username
 
       post = models.Posts.objects.filter(id = data['last_post']).values('poster', 'post_num')
       try:
@@ -99,17 +102,14 @@ def topic_data(request, board_num, topic_num):
   post_data = []
   
   for data in post:
-    try:
-      poster = User.objects.filter(id = data['poster']).values('username')[0]
-      poster_id = data['poster']
-      data['poster'] = poster['username']
-    except IndexError:
-      del data['poster']
-
-    if poster_id == topic['creator']:
-      data['is_creator'] = True
+    poster = User.objects.filter(id = data['poster']).get()
+    data['poster'] = poster.username
+    permission = poster.permission_set.all()
+    if permission:
+      power = permission.get().power
+      data['power'] = power
     post_data.append(data)
-  del topic['creator']
+  topic['creator'] = User.objects.filter(id = topic['creator']).get().username
 
   return JsonResponse({
     'topic_information': topic,

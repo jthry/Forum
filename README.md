@@ -49,15 +49,16 @@ npm run build
 pip3 install -r requirements.txt
 python manage.py makemigrations --empty user
 python manage.py makemigrations --empty forum
+python manage.py makemigrations --empty manager
 python manage.py makemigrations forum
+python manage.py makemigrations manager
 python manage.py migrate
 ```
 
-### Insert initial data in database
+### Create an administrator
 
 ```
-insert into forum_boards values (1, 'test1', 100, null, null, null)
-insert into forum_boards values (2, 'test2', 101, 0, 0, null)
+python manage.py createadministrator admin
 ```
 
 ### Run

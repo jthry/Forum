@@ -71,7 +71,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 100;
   transition: padding 0.3s;
   .logo_container {
     float: left;
@@ -98,12 +98,14 @@ export default {
       padding-bottom: 2px;
     }
     .user_menu {
-      display: none;
       width: 100%;
+      max-height: 0;
+      overflow: hidden;
       margin: auto;
       box-sizing: border-box;
       position: absolute;
       top: 49px;
+      transition: max-height 0.5s;
       > div {
         font-size: 14px;
         border: 1px solid #aaa;
@@ -118,6 +120,9 @@ export default {
   }
   .user_container:hover {
     background: rgb(60, 60, 60);
+    .user_menu {
+      max-height: 100px;
+    }
   }
   .user_container:hover .user_menu {
     display: block;

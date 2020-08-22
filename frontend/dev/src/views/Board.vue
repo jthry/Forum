@@ -7,6 +7,7 @@
         <div class="post_sum">Posts:{{ head.post_sum }}</div>
       </div>
       <div class="container clearfix" v-for="item in topics" :key="item.topic_num">
+        <manage :power="item.power" :board_num="board_num" :topic_num="item.topic_num"></manage>
         <div class="icon">
           <font-awesome-icon :icon="['fas', 'comment']" />
           <div class="post_sum">{{ item.post_sum - 1 }}</div>
@@ -75,6 +76,10 @@ function set_data(response, vm, page, board_num) {
   let topics = response.data.board_data;
   let head = response.data.board_information;
 
+  for (let i = 0; i < topics.length; i++) {
+    if (!topics[i]['power']) topics[i]['power'] = 0;
+  }
+
   vm.board_num = board_num || vm.board_num;
   vm.page = Number(page) || vm.page;
   let max = head.topic_sum;
@@ -97,6 +102,7 @@ export default {
     };
   },
   components: {
+    manage: () => import('@/components/Manage'),
     post: () => import('@/components/Post'),
     page: () => import('@/components/Page')
   },

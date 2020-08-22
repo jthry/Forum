@@ -3,9 +3,8 @@ from django.conf import settings
 import uuid
 
 class Boards(models.Model):
-  id = models.SmallIntegerField(primary_key=True, editable=False)
   name = models.CharField(max_length=20)
-  board_num = models.SmallIntegerField()
+  board_num = models.SmallIntegerField(unique=True)
   topic_sum = models.IntegerField(null=True)
   post_sum = models.IntegerField(null=True)
   last_post = models.ForeignKey('Posts', on_delete=models.SET_NULL, null=True, db_constraint=False)

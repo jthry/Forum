@@ -9,7 +9,9 @@ export default new Vuex.Store({
     username: '',
     now: '',
     scroll_top: 0,
-    btn_switch: true
+    btn_switch: true,
+    power: 0,
+    area: []
   },
   mutations: {
     change_login_state(state, value) {
@@ -34,6 +36,12 @@ export default new Vuex.Store({
     },
     change_btn_switch(state, value) {
       state.btn_switch = value;
+    },
+    set_power(state, value) {
+      state.power = value;
+    },
+    set_area(state, value) {
+      state.area = value;
     }
   },
   actions: {

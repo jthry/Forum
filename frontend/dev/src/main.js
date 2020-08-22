@@ -13,7 +13,10 @@ import {
   faTrashAlt,
   faPencilAlt,
   faCheck,
-  faTimes
+  faTimes,
+  faBars,
+  faCaretDown,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 Vue.config.productionTip = false;
@@ -40,11 +43,21 @@ axios.defaults.withCredentials = true;
         store.commit('change_login_state', true);
       }
       let username = getCookie('username');
-      if (username != null) {
+      if (username) {
         store.commit('set_username', username);
+      }
+      let power = getCookie('power');
+      if (power) {
+        store.commit('set_power', power);
+      }
+      let area = getCookie('area');
+      if (area) {
+        store.commit('set_area', area);
       }
       delCookie('isLogin');
       delCookie('username');
+      delCookie('power');
+      delCookie('area');
     })();
 
     router.beforeEach((to, from, next) => {
@@ -60,7 +73,19 @@ axios.defaults.withCredentials = true;
       }
     });
 
-    library.add(faUser, faLock, faComments, faComment, faTrashAlt, faPencilAlt, faCheck, faTimes);
+    library.add(
+      faUser,
+      faLock,
+      faComments,
+      faComment,
+      faTrashAlt,
+      faPencilAlt,
+      faCheck,
+      faTimes,
+      faBars,
+      faCaretDown,
+      faPlus
+    );
     Vue.component('font-awesome-icon', FontAwesomeIcon);
 
     Vue.mixin({

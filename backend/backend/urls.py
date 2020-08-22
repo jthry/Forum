@@ -21,5 +21,6 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html')),
     path('user/', include('user.urls')),
-    path('forum/', include('forum.urls'))
+    path('forum/', include('forum.urls')),
+    path('manager/', include('manager.urls'))
 ]
