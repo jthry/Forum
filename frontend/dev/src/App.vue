@@ -37,6 +37,7 @@ export default {
   word-break: break-word;
   .view {
     flex: 1;
+    width: 90%;
     padding: 5%;
   }
 }

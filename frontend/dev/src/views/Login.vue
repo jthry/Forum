@@ -3,10 +3,14 @@
     <div class="container">
       <div class="title">Log in</div>
       <div class="tip">{{ tip }}</div>
-      <font-awesome-icon class="fa" :icon="['fas', 'user']" />
+      <div class="icon">
+        <font-awesome-icon class="fa" :icon="['fas', 'user']" />
+      </div>
       <input type="text" v-model="username" placeholder="Username" />
       <br />
-      <font-awesome-icon class="fa" :icon="['fas', 'lock']" />
+      <div class="icon">
+        <font-awesome-icon class="fa" :icon="['fas', 'lock']" />
+      </div>
       <input type="password" v-model="password" placeholder="Password" />
       <br />
       <div class="button" @click="login">Log in</div>
@@ -60,37 +64,43 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  width: 400px;
-  height: 300px;
+  width: 25rem;
+  height: 18.75rem;
   text-align: center;
   border-radius: 5px;
   background: white;
   box-shadow: 1px 1px 6px rgb(141, 141, 141);
   margin: 100px auto;
   .title {
-    height: 50px;
+    height: 3.125rem;
     color: white;
     text-align: left;
-    text-indent: 20px;
-    font-size: 20px;
-    line-height: 50px;
+    text-indent: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 3.125rem;
     border-radius: 5px 5px 0 0;
     background: rgba(0, 0, 0, 0.7);
   }
   .tip {
-    height: 30px;
-    font-size: 14px;
-    line-height: 30px;
+    height: 1.875rem;
+    font-size: 0.875rem;
+    line-height: 1.875rem;
     color: red;
   }
-  .fa {
+  .icon {
+    display: inline-block;
+    width: 26px;
+    height: 30px;
     color: white;
+    font-size: 16px;
+    line-height: 29px;
+    text-align: center;
     background: rgb(100, 100, 100);
-    padding: 7px 6px 7px 8px;
+    padding-left: 2px;
     vertical-align: top;
   }
   input {
-    width: 200px;
+    width: 12.5rem;
     height: 24px;
     color: rgb(51, 51, 51);
     font-size: 16px;
@@ -104,13 +114,13 @@ export default {
   }
   .button {
     display: inline-block;
-    width: 80px;
+    width: 5rem;
     color: white;
     border-radius: 3px;
-    margin: 0 25px;
-    font-size: 14px;
+    margin: 0 calc(15px + 0.625rem);
+    font-size: 0.875rem;
     background: rgb(102, 102, 102);
-    padding: 5px;
+    padding: 5px 0.3125rem;
     cursor: pointer;
     transition: background 0.2s, color 0.4s;
   }

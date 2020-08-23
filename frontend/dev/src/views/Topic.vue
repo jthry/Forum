@@ -246,33 +246,24 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.clearfix::after {
-  content: '';
-  display: block;
-  clear: both;
-  height: 0;
-  width: 0;
-  visibility: hidden;
-}
 #topic {
-  padding: 3%;
   .topic_container {
     box-shadow: 0px 0px 5px rgb(80, 80, 80);
     margin-bottom: 5px;
     .topic {
       color: white;
-      font-size: 24px;
+      font-size: 1.5rem;
       border-bottom: 2px solid rgb(196, 196, 196);
       background: rgb(155, 155, 155);
       background-image: linear-gradient(to right, rgb(120, 120, 120), rgb(180, 180, 180), rgb(200, 200, 200));
-      padding: 10px;
+      padding: 0.625rem;
     }
     .container {
       display: flex;
       border-bottom: 2px solid rgb(196, 196, 196);
       background: white;
       .poster_container {
-        width: 150px;
+        width: 9.375rem;
         text-align: center;
         border-right: 1px solid rgb(211, 211, 211);
         background: rgb(248, 248, 248);
@@ -285,12 +276,12 @@ export default {
           color: rgb(255, 64, 64);
         }
         .profile {
-          width: 100px;
-          height: 100px;
+          width: 6.25rem;
+          height: 6.25rem;
           color: white;
-          font-size: 70px;
+          font-size: 4.375rem;
           text-align: center;
-          line-height: 100px;
+          line-height: 6.25rem;
           background: rgb(203, 223, 255);
           margin: 10px auto;
         }
@@ -306,29 +297,35 @@ export default {
           }
           .post_num {
             float: right;
-            margin-right: 10px;
+            margin-right: 0.625rem;
           }
           .button_container {
             float: right;
             .button {
               display: inline-block;
-              width: 16px;
-              font-size: 16px;
               text-align: center;
-              margin-right: 10px;
+              margin-right: 0.625rem;
               cursor: pointer;
             }
           }
         }
         .post {
-          min-height: 200px;
+          min-height: 12.5rem;
           padding: 3px;
           .text_edit {
-            min-height: 200px;
+            min-height: 12.5rem;
           }
         }
       }
     }
   }
+}
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  width: 0;
+  visibility: hidden;
 }
 </style>

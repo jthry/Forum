@@ -93,7 +93,7 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  width: 400px;
+  width: 25rem;
   height: 300px;
   text-align: center;
   border-radius: 5px;
@@ -101,27 +101,27 @@ export default {
   box-shadow: 1px 1px 6px rgb(141, 141, 141);
   margin: 100px auto;
   .title {
-    height: 50px;
+    height: 3.125rem;
     color: white;
     text-align: left;
-    text-indent: 20px;
-    font-size: 20px;
-    line-height: 50px;
+    text-indent: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 3.125rem;
     border-radius: 5px 5px 0 0;
     background: rgba(0, 0, 0, 0.7);
     margin-bottom: 30px;
   }
   .tip {
-    width: 200px;
+    width: 12.5rem;
     height: 20px;
     color: red;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: left;
     margin: auto;
     white-space: nowrap;
   }
   input {
-    width: 200px;
+    width: 12.5rem;
     height: 24px;
     color: rgb(51, 51, 51);
     font-size: 16px;
@@ -134,13 +134,13 @@ export default {
   }
   .button {
     display: inline-block;
-    width: 80px;
+    width: 5rem;
     color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
     border-radius: 3px;
     background: rgb(102, 102, 102);
-    margin: 0 10px;
-    padding: 5px;
+    margin: 0 0.625rem;
+    padding: 5px 0.3125rem;
     cursor: pointer;
     transition: background 0.2s, color 0.4s;
   }

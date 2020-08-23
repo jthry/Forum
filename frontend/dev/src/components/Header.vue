@@ -61,9 +61,8 @@ export default {
 <style lang="less" scoped>
 .header {
   width: 100%;
-  height: 49px;
+  height: 3.0625rem;
   color: white;
-  font-size: 20px;
   text-align: center;
   background-image: linear-gradient(rgba(60, 60, 60, 0.9), rgba(30, 30, 30, 0.9));
   box-shadow: 0px 3px 6px rgba(30, 30, 30, 0.9);
@@ -75,10 +74,10 @@ export default {
   transition: padding 0.3s;
   .logo_container {
     float: left;
-    width: 150px;
+    width: 9.375rem;
     height: 100%;
     .logo {
-      font-size: 36px;
+      font-size: 2.25rem;
       text-decoration: none;
       cursor: pointer;
     }
@@ -88,13 +87,13 @@ export default {
     justify-content: center;
     align-items: center;
     float: right;
-    width: 100px;
+    width: 6.25rem;
     height: 100%;
     position: relative;
     .user {
       flex: 1;
-      font-size: 18px;
-      line-height: 22px;
+      font-size: 1.125rem;
+      line-height: 1.375rem;
       padding-bottom: 2px;
     }
     .user_menu {
@@ -104,10 +103,10 @@ export default {
       margin: auto;
       box-sizing: border-box;
       position: absolute;
-      top: 49px;
+      top: 3.0625rem;
       transition: max-height 0.5s;
       > div {
-        font-size: 14px;
+        font-size: 0.875rem;
         border: 1px solid #aaa;
         background: rgba(0, 0, 0, 0.7);
         padding: 5px 0;
@@ -134,7 +133,7 @@ export default {
   padding: 0;
 }
 .fixed {
-  height: 55px;
+  height: 3.4375rem;
   visibility: hidden;
 }
 

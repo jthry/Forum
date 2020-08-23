@@ -74,11 +74,11 @@ export default {
 #page {
   .page {
     display: inline-block;
-    min-width: 26px;
-    height: 30px;
-    font-size: 14px;
+    min-width: 1.625rem;
+    height: 1.875rem;
+    font-size: 0.875rem;
     text-align: center;
-    line-height: 30px;
+    line-height: 1.875rem;
     border: 1px solid rgb(172, 172, 172);
     background: white;
     box-shadow: 0px 0px 3px rgb(130, 130, 130);

@@ -114,7 +114,7 @@ export default {
 
 <style lang="less" scoped>
 #manage {
-  position: relative;
+  position: absolute;
   .icon {
     width: 30px;
     height: 30px;
@@ -127,6 +127,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 150;
     transform: translate(-50%, -50%);
     transition: all 0.3s;
     cursor: pointer;
@@ -162,7 +163,7 @@ export default {
     max-height: 100px;
   }
   .add_board {
-    width: 100%;
+    width: 90vw;
     height: 30px;
     color: rgb(80, 80, 80);
     font-size: 22px;

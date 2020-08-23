@@ -16,8 +16,8 @@
           </div>
           <div class="right_container">
             <router-link :to="item.post_url || ''" class="last_topic" tag="div">{{ item.last_topic }}</router-link>
-            <div class="last_date">{{ time_format(item.last_date) }}</div>
             <div class="last_poster">{{ item.last_poster }}</div>
+            <div class="last_date">{{ time_format(item.last_date) }}</div>
           </div>
         </div>
       </div>
@@ -69,46 +69,54 @@ export default {
   .container {
     .container_name {
       text-align: left;
-      font-size: 30px;
+      font-size: 1.875rem;
       color: white;
       background: rgb(75, 75, 75);
       padding: 3px 10px;
     }
     .board {
+      display: grid;
+      grid-template-columns: 4.375rem 1fr 1fr;
       border-bottom: 2px solid #ddd;
       background: #fff;
       .icon {
-        float: left;
-        width: 50px;
-        height: 50px;
+        width: 3.125rem;
+        height: 3.125rem;
         color: rgb(75, 75, 75);
-        font-size: 30px;
+        font-size: 1.875rem;
         text-align: center;
-        line-height: 50px;
+        line-height: 3.125rem;
         margin: 10px;
       }
       .left_container {
-        float: left;
         .board_name {
           margin: 5px;
-          font-size: 22px;
+          font-size: 1.375rem;
           cursor: pointer;
         }
         .topic_sum,
         .post_sum {
           display: inline-block;
           color: #666;
-          font-size: 14px;
+          font-size: 0.875rem;
           margin: 3px;
         }
       }
       .right_container {
-        float: right;
+        display: grid;
+        grid-template-columns: 1fr 7.5rem;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        align-content: center;
+        text-align: right;
         color: #666;
-        font-size: 14px;
-        padding: 10px;
+        padding: 5px;
         .last_topic {
-          margin-bottom: 3px;
+          grid-column: ~'1 / 3';
+          font-size: 0.875rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           cursor: pointer;
         }
         .last_topic:hover {
@@ -116,8 +124,14 @@ export default {
         }
         .last_date,
         .last_poster {
-          display: inline-block;
-          margin-right: 10px;
+          font-size: 0.875rem;
+          line-height: 100%;
+        }
+        .last_poster {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          vertical-align: middle;
         }
       }
     }

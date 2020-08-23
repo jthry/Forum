@@ -16,8 +16,8 @@
           <router-link :to="topic_url(item.topic_num)" class="topic" :title="item.topic" tag="div">
             {{ item.topic }}
           </router-link>
-          <div class="creator">{{ item.creator }}</div>
           <div class="date">{{ time_format(item.date) }}</div>
+          <div class="creator">{{ item.creator }}</div>
         </div>
         <div class="right_container">
           <div class="last_post">
@@ -149,7 +149,6 @@ export default {
 
 <style lang="less" scoped>
 #board {
-  padding: 3%;
   .board_container {
     box-shadow: 0px 0px 5px rgb(80, 80, 80);
     margin-bottom: 5px;
@@ -158,27 +157,30 @@ export default {
       background: rgb(75, 75, 75);
       .head_name {
         color: white;
-        font-size: 30px;
+        font-size: 1.875rem;
         margin: 3px 5px;
       }
       .topic_sum,
       .post_sum {
         display: inline-block;
         color: rgb(167, 167, 167);
-        font-size: 14px;
+        font-size: 0.875rem;
         margin: 3px 5px;
       }
     }
     .container {
+      display: grid;
+      grid-template-columns: 3.125rem 1fr 1fr;
       border-bottom: 2px solid rgb(206, 206, 206);
       background: rgba(245, 245, 245);
       transition: background 0.3s;
       .icon {
-        float: left;
+        width: 2.5rem;
+        height: 2.5rem;
         color: rgb(102, 102, 102);
-        font-size: 40px;
+        font-size: 2.5rem;
         text-align: center;
-        line-height: 30px;
+        line-height: 1.875rem;
         margin: 5px;
         position: relative;
         .post_sum {
@@ -186,8 +188,8 @@ export default {
           width: 0px;
           height: 0px;
           color: rgb(255, 255, 255);
-          font-size: 10px;
-          line-height: 10px;
+          font-size: 0.625rem;
+          line-height: 0.625rem;
           position: absolute;
           top: 50%;
           left: 50%;
@@ -197,13 +199,14 @@ export default {
         }
       }
       .left_container {
-        float: left;
+        display: grid;
+        grid-template-columns: 6.25rem 1fr;
         padding: 5px;
         .topic {
-          display: block;
-          width: 220px;
+          grid-column: ~'1 / 3';
+          width: 13.75rem;
           color: rgb(81, 101, 214);
-          font-size: 16px;
+          font-size: 1rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -216,22 +219,22 @@ export default {
         .date {
           display: inline-block;
           color: #666;
-          font-size: 14px;
-          margin-right: 10px;
+          font-size: 0.875rem;
         }
       }
       .right_container {
-        float: right;
+        display: grid;
+        grid-template-columns: 1fr 20px;
+        align-content: center;
         text-align: right;
-        margin-top: 7px;
         color: #666;
         > div {
-          display: inline-block;
-          font-size: 14px;
-          margin: 0 20px 0 0;
-          vertical-align: middle;
+          font-size: 0.875rem;
         }
         .button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           cursor: pointer;
         }
       }
